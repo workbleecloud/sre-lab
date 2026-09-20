@@ -1,0 +1,18 @@
+# Logs and generated output
+*.log
+
+# Environment variable files / secrets
+*.env
+
+# Python generated files
+__pycache__/
+*.pyc
+
+# Terraform local/generated files
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Local editor / OS files
+.vscode/
+.DS_Store
