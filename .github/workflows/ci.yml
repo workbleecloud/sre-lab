@@ -1,0 +1,35 @@
+name: SRE Lab CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t "sre-api:test" ./python
+
+      - name: Start API container
+        run: docker run -d --name "sre-api" -p 8081:8000 "sre-api:test"
+
+      - name: Test API health
+        run: |
+          for attempt in {1..5}; do
+            if curl -fsS http://localhost:8081/health; then
+              echo "Health check passed"
+              exit 0
+            fi
+
+            echo "Health check failed - retrying..."
+            sleep 2
+          done
+
+          echo "Health check failed after 5 attempts"
+          exit 1
